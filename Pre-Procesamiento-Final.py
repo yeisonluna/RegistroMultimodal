@@ -112,10 +112,10 @@ while True:
 	if len(puntos) == 4:
 		#uniendo4puntos(puntos)
 		pts1 = np.float32([puntos])
-		pts2 = np.float32([[0,0], [228,0], [0,210], [228,210]])
+		pts2 = np.float32([[0,0], [455,0], [0,419], [455,419]])
 
 		M = cv2.getPerspectiveTransform(pts1,pts2)
-		dst = cv2.warpPerspective(imagen, M, (228,210))
+		dst = cv2.warpPerspective(imagen, M, (455,419))
 
 		cv2.imshow('dst', dst)
 	cv2.imshow('Imagen',imagen)
@@ -150,10 +150,10 @@ while True:
 	if len(puntos) == 4:
 		#uniendo4puntos(puntos)
 		pts1 = np.float32([puntos])
-		pts2 = np.float32([[0,0], [228,0], [0,210], [228,210]])
+		pts2 = np.float32([[0,0], [455,0], [0,419], [455,419]])
 
 		M = cv2.getPerspectiveTransform(pts1,pts2)
-		dst2 = cv2.warpPerspective(imagen, M, (228,210))
+		dst2 = cv2.warpPerspective(imagen, M, (455,419))
 
 		cv2.imshow('dst2', dst2)
 	cv2.imshow('Imagen',imagen)
@@ -174,10 +174,10 @@ while True:
 def ReplicarBordesPodoscopio(izq,der):    
     
     # Pie izquierdo
-    izq_bordes = cv2.copyMakeBorder(izq,123,122,113,114,cv2.BORDER_REPLICATE)
+    izq_bordes = cv2.copyMakeBorder(izq,18,18,0,0,cv2.BORDER_REPLICATE)
     
     # Pie derecho
-    der_bordes = cv2.copyMakeBorder(der,123,122,113,114,cv2.BORDER_REPLICATE)   
+    der_bordes = cv2.copyMakeBorder(der,18,18,0,0,cv2.BORDER_REPLICATE)   
     
     return izq_bordes,der_bordes
 #******************** Fin Replicar Bordes Podoscopio *************************#
@@ -236,7 +236,7 @@ def EncontrarRectanguloPodoscopio(imagen):
     
     for c in contornos:
         area=cv2.contourArea(c)
-        if area > 1000:
+        if area > 2000:
             x, y, w, h = cv2.boundingRect(c)
             #cv2.rectangle(gris, (x, y), (x+w, y+h), (128, 0, 0), 2)
             rectangulo = cv2.minAreaRect(c)
@@ -357,14 +357,14 @@ imagen_escala_presion_der = cv2.warpAffine(img1_der_bordes, M_escala, (cols,rows
 
 # Transformación de traslacion para pie izquierdo y derecho
 M_traslacion_izq = np.float32([[1,0,factorTraslacion_x_izq],[0,1,factorTraslacion_y_izq]])
-M_traslacion_der = np.float32([[1,0,factorTraslacion_x_der],[0,1,0]])
+M_traslacion_der = np.float32([[1,0,factorTraslacion_x_izq],[0,1,0]])
 
 imagen_traslacion_presion_izq = cv2.warpAffine(imagen_escala_presion_izq, M_traslacion_izq, (cols,rows))
 imagen_traslacion_presion_der = cv2.warpAffine(imagen_escala_presion_der, M_traslacion_der, (cols,rows))
 
 # Transformacion de rotacion para pie izq y der
 M_rotacion_izq = cv2.getRotationMatrix2D((cols/2,rows/2),factorAngulo_izq,1)
-M_rotacion_der = cv2.getRotationMatrix2D((cols/2,rows/2),factorAngulo_der,1)
+M_rotacion_der = cv2.getRotationMatrix2D((cols/2,rows/2),-factorAngulo_izq,1)
 
 imagen_final_presion_izq = cv2.warpAffine(imagen_traslacion_presion_izq,M_rotacion_izq,(cols,rows))
 imagen_final_presion_der = cv2.warpAffine(imagen_traslacion_presion_der,M_rotacion_der,(cols,rows))
@@ -382,9 +382,3 @@ cv2.imwrite("C:/Users/yeiso/Desktop/Universidad/Trabajo de grado/Prueba 01-06-20
 
 
 #------------ Fin Pre procesamiento Conjunto - Estimación de variables s,x,y,theta -----------#
-
-
-
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()
