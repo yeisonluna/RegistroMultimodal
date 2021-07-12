@@ -382,3 +382,9 @@ cv2.imwrite("C:/Users/yeiso/Desktop/Universidad/Trabajo de grado/Prueba 01-06-20
 
 
 #------------ Fin Pre procesamiento Conjunto - Estimación de variables s,x,y,theta -----------#
+
+
+
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
